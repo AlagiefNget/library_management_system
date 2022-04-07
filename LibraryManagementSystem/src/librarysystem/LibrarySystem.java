@@ -25,7 +25,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	JPanel mainPanel;
 	JMenuBar menuBar;
     JMenu options;
-    JMenuItem login, allBookIds, allMemberIds; 
+    JMenuItem login, allBookIds, allMemberIds, addBookCopy; 
     String pathToImage;
     private boolean isInitialized = false;
     
@@ -33,7 +33,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	LibrarySystem.INSTANCE,
 		LoginWindow.INSTANCE,
 		AllMemberIdsWindow.INSTANCE,	
-		AllBookIdsWindow.INSTANCE
+		AllBookIdsWindow.INSTANCE,
+		AddABookCopyWindow.INSTANCE
 	};
     	
 	public static void hideAllWindows() {
@@ -85,16 +86,20 @@ public class LibrarySystem extends JFrame implements LibWindow {
  	   menuBar.add(options);
  	   login = new JMenuItem("Login");
  	   login.addActionListener(new LoginListener());
+ 	   addBookCopy = new JMenuItem("Add Book Copy");
+ 	   addBookCopy.addActionListener(new AddBookCopyListener());
  	   allBookIds = new JMenuItem("All Book Ids");
  	   allBookIds.addActionListener(new AllBookIdsListener());
  	   allMemberIds = new JMenuItem("All Member Ids");
  	   allMemberIds.addActionListener(new AllMemberIdsListener());
+ 	   
  	   options.add(login);
  	   options.add(allBookIds);
  	   options.add(allMemberIds);
+ 	   options.add(addBookCopy);
     }
     
-    class LoginListener implements ActionListener {
+    class LoginListener  implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -102,6 +107,18 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			LoginWindow.INSTANCE.init();
 			Util.centerFrameOnDesktop(LoginWindow.INSTANCE);
 			LoginWindow.INSTANCE.setVisible(true);
+			
+		}
+    	
+    }
+    class AddBookCopyListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			AddABookCopyWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(AddABookCopyWindow.INSTANCE);
+			AddABookCopyWindow.INSTANCE.setVisible(true);
 			
 		}
     	
