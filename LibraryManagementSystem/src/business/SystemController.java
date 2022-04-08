@@ -8,6 +8,8 @@ import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
+import librarysystem.LibrarySystem;
+import librarysystem.LoginWindow;
 
 public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
@@ -22,6 +24,7 @@ public class SystemController implements ControllerInterface {
 		if(!passwordFound.equals(password)) {
 			throw new LoginException("Password incorrect");
 		}
+		System.out.println(map.get(id));
 		currentAuth = map.get(id).getAuthorization();
 		
 	}
@@ -41,5 +44,10 @@ public class SystemController implements ControllerInterface {
 		return retval;
 	}
 	
-	
+	public static void logout() {
+		currentAuth = null;
+		LibrarySystem.hideAllWindows();
+		LibrarySystem.INSTANCE.init();
+		LibrarySystem.INSTANCE.setVisible(true);
+	}
 }

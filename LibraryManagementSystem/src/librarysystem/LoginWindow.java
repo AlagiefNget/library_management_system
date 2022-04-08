@@ -19,7 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 
 import business.ControllerInterface;
-
+import business.LoginException;
 import business.SystemController;
 import dataaccess.DataAccessFacade;
 import dataaccess.TestData;
@@ -125,8 +125,6 @@ public class LoginWindow extends JFrame implements LibWindow {
     		
     	}
     	
-    	
-    	
     	private void defineMiddlePanel() {
     		middlePanel=new JPanel();
     		middlePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -190,39 +188,24 @@ public class LoginWindow extends JFrame implements LibWindow {
     		butn.addActionListener(evt -> {
     			String userName = username.getText().trim();
 				String pswd = new String(password.getPassword());
-				
 				if(userName.length() == 0 || pswd.length() == 0) {
 					JOptionPane.showMessageDialog(this,"Id and Password fields must be nonempty");
 				}else {
-					User foundUser =  DataAccessFacade.getUser(userName, pswd, null);
-					System.out.println(foundUser.getAuthorization());
-					
-					if(foundUser == null) {
-						JOptionPane.showMessageDialog(this,"Login failed!");
-					}else {
-						 DataAccessFacade.currentAuth = foundUser.getAuthorization();
-						 JOptionPane.showMessageDialog(this,"Successful Login");
-		    			 LibrarySystem.hideAllWindows();
-		 				 LibrarySystem.INSTANCE.setVisible(true);
-//						 updateSideBar(Data.currentAuth);
-//						bookClub.repaint();
+					ControllerInterface controller = new SystemController();
+					try {
+						controller.login(userName, pswd);
+						JOptionPane.showMessageDialog(this,"Successful Login");
+						LibrarySystem.hideAllWindows();
+						LibrarySystem.INSTANCE.init();
+						LibrarySystem.INSTANCE.setVisible(true);
+						username.setText("");
+						password.setText("");
+					} catch (LoginException e) {
+						e.printStackTrace();
 					}
 				}
-				
-    			
     		});
     	}
 	
-//    	private void updateSideBar(Auth currentAuth) {
-//    		if(currentAuth ==  Auth.MEMBER) {
-//    			memberItems();
-//    		}
-//    		else if(currentAuth == Auth.SELLER) {
-//    			sellerItems();
-//    		}
-//    		else {
-//    			bothItems();
-//    		}
-//    	}
-//    
+
 }
