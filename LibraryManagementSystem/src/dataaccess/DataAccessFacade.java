@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class DataAccessFacade implements DataAccess {
 		BOOKS, MEMBERS, USERS;
 	}
 	
+	public static Auth currentAuth = null;
 	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
 			+ "\\src\\dataaccess\\storage";
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
@@ -96,6 +99,23 @@ public class DataAccessFacade implements DataAccess {
 		}
 	}
 	
+	
+	public static User findUser(Collection<User> list, User user) {
+		for(User u : list) {
+		//	System.out.println(u);
+			if(u.getId().equals(user.getId()) && u.getPassword().equals(user.getPassword())) return u;
+		}
+		return null;
+		
+	}
+	
+	public static User getUser(String username, String password, Auth auth){
+		DataAccessFacade df = new DataAccessFacade(); 
+		User user = new User(username, password,auth);
+		
+		return findUser(df.readUserMap().values(), user);
+
+	}
 	static Object readFromStorage(StorageType type) {
 		ObjectInputStream in = null;
 		Object retVal = null;

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -14,11 +15,15 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
 import javax.swing.JOptionPane;
 
 import business.ControllerInterface;
 
 import business.SystemController;
+import dataaccess.DataAccessFacade;
+import dataaccess.TestData;
+import dataaccess.User;
 
 
 public class LoginWindow extends JFrame implements LibWindow {
@@ -39,13 +44,10 @@ public class LoginWindow extends JFrame implements LibWindow {
 	private JPanel rightTextPanel;
 	
 	private JTextField username;
-	private JTextField password;
+	private JPasswordField password;
 	private JLabel label;
 	private JButton loginButton;
 	private JButton logoutButton;
-	
-	
-	
 	
 	public boolean isInitialized() {
 		return isInitialized;
@@ -186,11 +188,41 @@ public class LoginWindow extends JFrame implements LibWindow {
     	
     	private void addLoginButtonListener(JButton butn) {
     		butn.addActionListener(evt -> {
-    			JOptionPane.showMessageDialog(this,"Successful Login");
-    				
+    			String userName = username.getText().trim();
+				String pswd = new String(password.getPassword());
+				
+				if(userName.length() == 0 || pswd.length() == 0) {
+					JOptionPane.showMessageDialog(this,"Id and Password fields must be nonempty");
+				}else {
+					User foundUser =  DataAccessFacade.getUser(userName, pswd, null);
+					System.out.println(foundUser.getAuthorization());
+					
+					if(foundUser == null) {
+						JOptionPane.showMessageDialog(this,"Login failed!");
+					}else {
+						 DataAccessFacade.currentAuth = foundUser.getAuthorization();
+						 JOptionPane.showMessageDialog(this,"Successful Login");
+		    			 LibrarySystem.hideAllWindows();
+		 				 LibrarySystem.INSTANCE.setVisible(true);
+//						 updateSideBar(Data.currentAuth);
+//						bookClub.repaint();
+					}
+				}
+				
+    			
     		});
     	}
 	
-        
-    
+//    	private void updateSideBar(Auth currentAuth) {
+//    		if(currentAuth ==  Auth.MEMBER) {
+//    			memberItems();
+//    		}
+//    		else if(currentAuth == Auth.SELLER) {
+//    			sellerItems();
+//    		}
+//    		else {
+//    			bothItems();
+//    		}
+//    	}
+//    
 }

@@ -15,13 +15,13 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class AddABookCopyWindow extends JFrame implements LibWindow {
+public class PrintCheckoutWindow extends JFrame implements LibWindow {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final AddABookCopyWindow INSTANCE = new AddABookCopyWindow();
+	public static final PrintCheckoutWindow INSTANCE = new PrintCheckoutWindow();
 
 	private boolean isInitialized = false;
 
@@ -30,7 +30,6 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 	private JPanel lowerHalf;
 	private JPanel outerMiddle;
 	
-	private JTextField copyNumber;
 	private JTextField searchField;
 	
 	JButton searchButton;
@@ -50,7 +49,7 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 	}
 
 	/* This class is a singleton */
-	private AddABookCopyWindow() {
+	private PrintCheckoutWindow() {
 	
 	}
 
@@ -106,59 +105,23 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
 		JPanel searchPanel = new JPanel();
-		
-		JLabel copyLabel = new JLabel("Copy Number");
-		JLabel searchLabel = new JLabel("Enter ISBN");
+		JLabel searchLabel = new JLabel("Enter Member ID");
 
-		copyNumber = new JTextField(10);
-		searchField = new JTextField(30); 
+		searchField = new JTextField(20); 
 		searchButton = new JButton("Search");
 		searchButtonListener(searchButton);
 		
-//		leftPanel.add(searchLabel);
-//		leftPanel.add(Box.createRigidArea(new Dimension(0, 12)));
-
 		searchPanel.add(searchLabel);
 		searchPanel.add(searchField);
 		searchPanel.add(searchButton);
 		
-		rightPanel.add(Box.createRigidArea(new Dimension(0, 4)));
-		rightPanel.add(Box.createRigidArea(new Dimension(0, 4)));
-
-
-		leftPanel.add(copyLabel);
-		leftPanel.add(Box.createRigidArea(new Dimension(0, 12)));
-
-		rightPanel.add(copyNumber);
-		rightPanel.add(Box.createRigidArea(new Dimension(0, 8)));
-
-		middlePanel.add(leftPanel);
-		middlePanel.add(rightPanel);
-		
 		outerMiddle.add(searchPanel, BorderLayout.NORTH);
-		outerMiddle.add(middlePanel, BorderLayout.CENTER);
-
-		// this portion adds buttons to the bottom
-		JButton addBookButton = new JButton("Add Copy");
-		addBookCopyButtonListener(addBookButton);
-		JPanel addBookButtonPanel = new JPanel();
-		addBookButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		addBookButtonPanel.add(addBookButton);
-		outerMiddle.add(addBookButtonPanel, BorderLayout.SOUTH);
-
 	}
 
 	private void addBackButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			LibrarySystem.hideAllWindows();
 			LibrarySystem.INSTANCE.setVisible(true);
-		});
-	}
-
-	private void addBookCopyButtonListener(JButton butn) {
-		butn.addActionListener(evt -> {
-			JOptionPane.showMessageDialog(this, "Successful added Book");
-
 		});
 	}
 	
