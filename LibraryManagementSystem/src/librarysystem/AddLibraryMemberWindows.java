@@ -16,6 +16,11 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.AddMemberException;
+import business.ControllerInterface;
+import business.LoginException;
+import business.SystemController;
+
 public class AddLibraryMemberWindows extends JFrame implements LibWindow {
 	/**
 	 * 
@@ -114,7 +119,7 @@ public class AddLibraryMemberWindows extends JFrame implements LibWindow {
 		JLabel idLabel = new JLabel("Member ID");
 		JLabel authFirstNameLabel = new JLabel("First Name");
 		JLabel authLastNameLabel = new JLabel("Last Name");
-		JLabel phoneLabel = new JLabel("Pnone Number");
+		JLabel phoneLabel = new JLabel("Phone Number");
 		
 		JLabel streetLabel = new JLabel("Street");
 		JLabel cityLabel = new JLabel("City");
@@ -186,9 +191,45 @@ public class AddLibraryMemberWindows extends JFrame implements LibWindow {
 
 	private void addBookCopyButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			JOptionPane.showMessageDialog(this, "Successful added Book");
+
+			String id = idField.getText().trim();
+			String firstName = firstNameField.getText().trim();
+			String lastName = lastNameField.getText().trim();
+			String phone = phoneField.getText().trim();
+			String city = cityField.getText().trim();
+			String state = stateField.getText().trim();
+			String street = stateField.getText().trim();
+			String zip = zipField.getText().trim();
+			
+			if(id.length() == 0 || firstName.length() == 0 || lastName.length() == 0 || phone.length() == 0 
+					|| city.length() == 0 || state.length() == 0 || street.length() == 0|| zip.length() == 0) {
+				JOptionPane.showMessageDialog(this,"All fields must be nonempty");
+			}else {
+				ControllerInterface controller = new SystemController();
+				try {
+					controller.addMember(id, firstName, lastName, phone, city, street, state, zip);
+					JOptionPane.showMessageDialog(this,"Member added Successfully");
+					LibrarySystem.hideAllWindows();
+					LibrarySystem.INSTANCE.init();
+					LibrarySystem.INSTANCE.setVisible(true);
+					setToInitial();
+				} catch (AddMemberException e) {
+					e.printStackTrace();
+				}
+			}
 
 		});
+	}
+	
+	private void setToInitial() {
+		idField.setText("");
+		firstNameField.setText("");
+		lastNameField.setText("");
+		phoneField.setText("");
+		cityField.setText("");
+		stateField.setText("");
+		stateField.setText("");
+		zipField.setText("");
 	}
 
 }

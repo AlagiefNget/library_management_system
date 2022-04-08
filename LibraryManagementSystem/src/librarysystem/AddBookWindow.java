@@ -15,6 +15,11 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.AddMemberException;
+import business.BookException;
+import business.ControllerInterface;
+import business.SystemController;
+
 public class AddBookWindow extends JFrame implements LibWindow {
 	/**
 	 * 
@@ -148,9 +153,34 @@ public class AddBookWindow extends JFrame implements LibWindow {
 
 	private void addBookCopyButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			JOptionPane.showMessageDialog(this, "Successful added Book");
+			String isbn = isbnField.getText().trim();
+			// int maxCheckout = Integer.valueOf(maxCheckoutField.getText().trim());
+			String title = titleField.getText().trim();
+			
+			if(isbn.length() == 0 || maxCheckoutField.getText() != null || title.length() == 0 ) {
+				JOptionPane.showMessageDialog(this,"All fields must be nonempty");
+			}else {
+				int maxCheckout = Integer.valueOf(maxCheckoutField.getText().trim());
+				ControllerInterface controller = new SystemController();
+				try {
+					controller.addBook(isbn, title, maxCheckout);
+					JOptionPane.showMessageDialog(this,"Book added Successfully");
+					LibrarySystem.hideAllWindows();
+					LibrarySystem.INSTANCE.init();
+					LibrarySystem.INSTANCE.setVisible(true);
+					setToInitial();
+				} catch (BookException e) {
+					e.printStackTrace();
+				}
+			}
 
 		});
+	}
+	
+	private void setToInitial() {
+		isbnField.setText("");
+		maxCheckoutField.setText("");
+		titleField.setText("");
 	}
 
 }
