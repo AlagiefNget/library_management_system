@@ -104,8 +104,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addBook.addActionListener(new AddBookListener());
 		addMember = new JMenuItem("Add Member");
 		addMember.addActionListener(new AddMemberListener());
+		checkoutBook = new JMenuItem("Checkout");
+		checkoutBook.addActionListener(new CheckoutBookListener());
 		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
-		printCheckOutRecord.addActionListener(new CheckoutBookListener());
+		printCheckOutRecord.addActionListener(new PrintCheckoutBookListener());
 		
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {
@@ -264,6 +266,16 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 	}
 	
+	class PrintCheckoutBookListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			PrintCheckoutWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(PrintCheckoutWindow.INSTANCE);
+			PrintCheckoutWindow.INSTANCE.setVisible(true);
+		}
+
+	}
 	@Override
 	public boolean isInitialized() {
 		return isInitialized;
