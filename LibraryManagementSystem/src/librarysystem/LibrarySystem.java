@@ -39,7 +39,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			AddLibraryMemberWindows.INSTANCE,
 			AllBookIdsWindow.INSTANCE, 
 			AddABookCopyWindow.INSTANCE,
-			PrintCheckoutWindow.INSTANCE
+			PrintCheckoutWindow.INSTANCE,
+			AddAuthorsToBookWindow.INSTANCE
 		};
 
 	public static void hideAllWindows() {
@@ -102,7 +103,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addBook.addActionListener(new AddBookListener());
 		addMember = new JMenuItem("Add Member");
 		addMember.addActionListener(new AddMemberListener());
-		printCheckOutRecord = new JMenuItem("Print Member Checkhouts");
+		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
 		printCheckOutRecord.addActionListener(new PrintMemberCheckoutListener());
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {

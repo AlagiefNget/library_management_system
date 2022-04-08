@@ -201,7 +201,10 @@ public class LoginWindow extends JFrame implements LibWindow {
 						username.setText("");
 						password.setText("");
 					} catch (LoginException e) {
-						e.printStackTrace();
+						// e.printStackTrace();
+						username.setText("");
+						password.setText("");
+						JOptionPane.showMessageDialog(this,"Username or password is incorrect, Try Again");
 					}
 				}
     		});
