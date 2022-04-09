@@ -110,7 +110,7 @@ public class SystemController implements ControllerInterface {
 		return nextAvailable;
 	}
 	
-	public boolean checkoutBook(String memId, String isbn) {
+	public CheckoutRecord checkoutBook(String memId, String isbn) {
 		Book book = getBook(isbn);
 		if(book != null) {
 			LibraryMember member = getLibraryMember(memId);
@@ -125,15 +125,15 @@ public class SystemController implements ControllerInterface {
 				mems.put(member.getMemberId(), member);
 				da.saveMembers(mems);				
 				
-				return true;
+				return member.getCheckoutRecord();
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Member with ID not found");
-				return false;
+				return null;
 			}
 		}else {
 			JOptionPane.showMessageDialog(null, "Book with ISBN not found");
-			return false;
+			return null;
 		}
 	}
 	

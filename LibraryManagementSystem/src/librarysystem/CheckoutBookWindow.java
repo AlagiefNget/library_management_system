@@ -3,6 +3,9 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -10,10 +13,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.TableColumn;
 
+import business.CheckoutRecord;
 import business.SystemController;
 
 public class CheckoutBookWindow extends JFrame implements LibWindow {
@@ -27,9 +34,23 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 	private JPanel middleHalf;
 	private JPanel lowerHalf;
 	private JPanel outerMiddle;
-
+	private JPanel topPanel;
+	
 	private JTextField memberId;
 	private JTextField bookIsbn;
+
+	// JTable
+	private JTable table;
+	private JScrollPane scrollPane;
+	private CustomTableModel model;
+	private final String[] DEFAULT_COLUMN_HEADERS = { "Book Title", "Checkout Date", "Due Date" };
+
+	private final float[] COL_WIDTH_PROPORTIONS = { 0.35f, 0.35f, 0.3f };
+
+	private static final int SCREEN_WIDTH = 640;
+	private static final int SCREEN_HEIGHT = 480;
+	private static final int TABLE_WIDTH = (int) (0.75 * SCREEN_WIDTH);
+	private static final int DEFAULT_TABLE_HEIGHT = (int) (0.25 * SCREEN_HEIGHT);
 
 	public boolean isInitialized() {
 		return isInitialized;
@@ -55,12 +76,16 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 		defineOuterMiddle();
 		defineMiddleHalf();
 		defineLowerHalf();
+		defineTablePanel();
 		BorderLayout bl = new BorderLayout();
 		bl.setVgap(30);
 		mainPanel.setLayout(bl);
 
-		mainPanel.add(middleHalf, BorderLayout.CENTER);
+//		mainPanel.add(middleHalf, BorderLayout.CENTER);
+		mainPanel.add(middleHalf, BorderLayout.NORTH);
+		mainPanel.add(topPanel, BorderLayout.CENTER);
 		mainPanel.add(lowerHalf, BorderLayout.SOUTH);
+		
 		getContentPane().add(mainPanel);
 		isInitialized(true);
 		pack();
@@ -75,6 +100,13 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 		middleHalf.add(outerMiddle, BorderLayout.NORTH);
 		middleHalf.add(s, BorderLayout.SOUTH);
 
+	}
+	
+	private void defineTablePanel() {
+		topPanel = new JPanel();
+		createTableAndTablePane();
+		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		topPanel.add(scrollPane);		
 	}
 
 	private void defineLowerHalf() {
@@ -121,14 +153,14 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 		middlePanel.add(rightPanel);
 		outerMiddle.add(middlePanel, BorderLayout.NORTH);
 
-		JButton searchBookAndMemberButton = new JButton("Checkout");
-		searchButtonMemberListener(searchBookAndMemberButton);
+		JButton checkoutBookButton = new JButton("Checkout");
+		checkoutButtonMemberListener(checkoutBookButton);
 
 		// this portion adds buttons to the bottom
 
 		JPanel chekoutBookButtonPanel = new JPanel();
 		chekoutBookButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		chekoutBookButtonPanel.add(searchBookAndMemberButton);
+		chekoutBookButtonPanel.add(checkoutBookButton);
 		outerMiddle.add(chekoutBookButtonPanel, BorderLayout.CENTER);
 
 	}
@@ -140,7 +172,7 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 		});
 	}
 
-	private void searchButtonMemberListener(JButton butn) {
+	private void checkoutButtonMemberListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			String memId = memberId.getText();
 			String isbn = bookIsbn.getText();
@@ -149,14 +181,46 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 			}
 
 			SystemController controller = new SystemController();
-			boolean isDone = controller.checkoutBook(memId, isbn);
-
-			if (isDone) {
-				JOptionPane.showMessageDialog(null, "Book check successful!");
+			CheckoutRecord checkoutRecords = controller.checkoutBook(memId, isbn);
+//            TODO - Finish print out records in a table.
+			if (checkoutRecords != null) {
+				JOptionPane.showMessageDialog(null, "Book checkout successful!");
 			} else {
 				JOptionPane.showMessageDialog(null, "Book checkout failed!");
 			}
 		});
+	}
+
+	private void createTableAndTablePane() {
+		updateModel();
+		table = new JTable(model);
+		createCustomColumns(table, TABLE_WIDTH, COL_WIDTH_PROPORTIONS, DEFAULT_COLUMN_HEADERS);
+		scrollPane = new JScrollPane();
+		scrollPane.setPreferredSize(new Dimension(TABLE_WIDTH, DEFAULT_TABLE_HEIGHT));
+		scrollPane.getViewport().add(table);
+	}
+
+	public void updateModel(List<String[]> list) {
+		if (model == null) {
+			model = new CustomTableModel();
+		}
+		model.setTableValues(list);
+	}
+
+	private void updateModel() {
+		List<String[]> theData = new ArrayList<String[]>();
+		updateModel(theData);
+	}
+
+	private void createCustomColumns(JTable table, int width, float[] proportions, String[] headers) {
+		table.setAutoCreateColumnsFromModel(false);
+		int num = headers.length;
+		for (int i = 0; i < num; ++i) {
+			TableColumn column = new TableColumn(i);
+			column.setHeaderValue(headers[i]);
+			column.setMinWidth(Math.round(proportions[i] * width));
+			table.addColumn(column);
+		}
 	}
 
 }
