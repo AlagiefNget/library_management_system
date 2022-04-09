@@ -105,7 +105,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addMember = new JMenuItem("Add Member");
 		addMember.addActionListener(new AddMemberListener());
 		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
-		printCheckOutRecord.addActionListener(new CheckoutBookListener());
+		printCheckOutRecord.addActionListener(new PrintMemberCheckoutListener());
+		checkoutBook = new JMenuItem("Checkout Book");
+		checkoutBook.addActionListener(new CheckoutBookListener());
 		
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {
