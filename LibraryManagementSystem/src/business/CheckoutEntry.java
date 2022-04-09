@@ -17,7 +17,7 @@ public class CheckoutEntry implements Serializable {
 	}
 
 	public Date getCheckoutDate() {
-		return checkoutDate;
+		return (Date) checkoutDate.clone();
 	}
 
 	public void setCheckoutDate(Date checkoutDate) {
@@ -25,7 +25,7 @@ public class CheckoutEntry implements Serializable {
 	}
 
 	public Date getDueDate() {
-		return dueDate;
+		return (Date)dueDate.clone();
 	}
 
 	public void setDueDate(Date dueDate) {

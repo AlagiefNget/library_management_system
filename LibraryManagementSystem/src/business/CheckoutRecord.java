@@ -19,9 +19,21 @@ public class CheckoutRecord implements Serializable{
 		return checkoutEntries;
 	}
 	public void printCheckOutRecordEntry() {
-		for(CheckoutEntry entry:checkoutEntries) {
-			System.out.println(entry.getBookCopy().getBook() +   " " + entry.getCheckoutDate()+ " " + entry.getDueDate());
-		}
+		System.out.println("-----------------------------------------------------------------------------");
+        System.out.printf("%10s  %10s %20s %20s ", "ISBN","MAXLENGTH", "CHECKOUTDATE", "DUEDATE");
+        System.out.println();
+        System.out.println("-----------------------------------------------------------------------------");
+    	for(CheckoutEntry entry:checkoutEntries){
+        	System.out.format("%10s %10d %20s %20s",entry.getBookCopy().getBook().getIsbn(),entry.getBookCopy().getBook().getMaxCheckoutLength(),
+        			entry.getCheckoutDate(), entry.getDueDate());
+        	
+            System.out.println();
+        }
+        System.out.println("-----------------------------------------------------------------------------");
+
+//		for(CheckoutEntry entry:checkoutEntries) {
+//			System.out.format("%10s %20s %5s",entry.getBookCopy().getBook() +   " " + entry.getCheckoutDate()+ " " + entry.getDueDate());
+//		}
 		
 	}
 }
