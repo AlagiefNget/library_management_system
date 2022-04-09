@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import business.Author;
 import business.Book;
 import business.BookCopy;
 import business.LibraryMember;
@@ -21,7 +22,7 @@ import dataaccess.DataAccessFacade.StorageType;
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
-		BOOKS, MEMBERS, USERS;
+		BOOKS, MEMBERS, USERS, AUTHORS;
 	}
 	
 	public static Auth currentAuth = null;
@@ -37,6 +38,12 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, mems);	
 	}
 	
+	public void saveNewAuthor(Author author) {
+		HashMap<String, Author> authors = readAuthorMap();
+		String authorName = author.getFirstName();
+		authors.put(authorName, author);
+		saveToStorage(StorageType.AUTHORS, authors);	
+	}
 	//implement: save new Book
 	public void saveNewBook(Book book) {
 		HashMap<String, Book> books = readBooksMap();
@@ -60,6 +67,13 @@ public class DataAccessFacade implements DataAccess {
 				StorageType.MEMBERS);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public HashMap<String, Author> readAuthorMap() {
+		//Returns a Map with name/value pairs being
+		//   memberId -> LibraryMember
+		return (HashMap<String, Author>) readFromStorage(
+				StorageType.AUTHORS);
+	}
 	
 	@SuppressWarnings("unchecked")
 	public HashMap<String, User> readUserMap() {
@@ -88,6 +102,11 @@ public class DataAccessFacade implements DataAccess {
 		HashMap<String, LibraryMember> members = new HashMap<String, LibraryMember>();
 		memberList.forEach(member -> members.put(member.getMemberId(), member));
 		saveToStorage(StorageType.MEMBERS, members);
+	}
+	static void loadAuthorMap(List<Author> authorList) {
+		HashMap<String, Author> authors = new HashMap<String, Author>();
+		authorList.forEach(author -> authors.put(author.getFirstName(), author));
+		saveToStorage(StorageType.AUTHORS, authors);
 	}
 	
 	static void saveToStorage(StorageType type, Object ob) {

@@ -13,15 +13,15 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import business.ControllerInterface;
 import business.SystemController;
 import dataaccess.Auth;
-import dataaccess.DataAccessFacade;
 
 public class LibrarySystem extends JFrame implements LibWindow {
+	private static final long serialVersionUID = -7888058519835867106L;
+	
 	ControllerInterface ci = new SystemController();
 	public final static LibrarySystem INSTANCE = new LibrarySystem();
 	JPanel mainPanel;
@@ -40,7 +40,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			AllBookIdsWindow.INSTANCE, 
 			AddABookCopyWindow.INSTANCE,
 			CheckoutBookWindow.INSTANCE,
-			PrintCheckoutWindow.INSTANCE
+			PrintCheckoutWindow.INSTANCE,
+			AddAuthorsToBookWindow.INSTANCE
 		};
 
 	public static void hideAllWindows() {
@@ -103,10 +104,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addBook.addActionListener(new AddBookListener());
 		addMember = new JMenuItem("Add Member");
 		addMember.addActionListener(new AddMemberListener());
-		printCheckOutRecord = new JMenuItem("Print Member Checkhouts");
-		printCheckOutRecord.addActionListener(new PrintMemberCheckoutListener());
-		checkoutBook = new JMenuItem("Checkhout Book");
-		checkoutBook.addActionListener(new CheckoutBookListener());
+		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
+		printCheckOutRecord.addActionListener(new CheckoutBookListener());
 		
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {

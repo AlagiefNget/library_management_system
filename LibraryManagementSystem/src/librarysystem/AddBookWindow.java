@@ -3,14 +3,17 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -36,9 +39,15 @@ public class AddBookWindow extends JFrame implements LibWindow {
 	private JPanel outerMiddle;
 	 
 	private JTextField isbnField;
-	private JTextField maxCheckoutField;
 	private JTextField titleField;
 	
+	private JRadioButton sevenDays;
+    private JRadioButton twentyOneDays;
+    
+    private static int checkOutLength = 0;
+    
+	private static String bookIsbn, bookTitle;
+	private static int bookmaxCheckout;
 	
 	public boolean isInitialized() {
 		return isInitialized;
@@ -115,8 +124,22 @@ public class AddBookWindow extends JFrame implements LibWindow {
 		JLabel maxCheckOutLabel = new JLabel("Max Checkout Length");
 
 		isbnField = new JTextField(10);
-		maxCheckoutField = new JTextField(10);
 		titleField = new JTextField(10);
+		sevenDays = new JRadioButton();
+		
+		twentyOneDays = new JRadioButton();
+		
+		sevenDays.setText("Seven");
+		twentyOneDays.setText("Twenty-One");
+		sevenDays.addActionListener(e->{
+			checkOutLength=7;
+			twentyOneDays.setSelected(false);
+			});
+		twentyOneDays.addActionListener(e->{
+			checkOutLength =21;
+			sevenDays.setSelected(false);
+		});
+
 		
 		leftPanel.add(isbnLabel);
 		leftPanel.add(Box.createRigidArea(new Dimension(0, 12)));
@@ -128,14 +151,15 @@ public class AddBookWindow extends JFrame implements LibWindow {
 		rightPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 		rightPanel.add(titleField);
 		rightPanel.add(Box.createRigidArea(new Dimension(0, 8)));
-		rightPanel.add(maxCheckoutField);
+		rightPanel.add(sevenDays);
+		rightPanel.add(twentyOneDays);
 
 		middlePanel.add(leftPanel);
 		middlePanel.add(rightPanel);
 		outerMiddle.add(middlePanel, BorderLayout.NORTH);
 
 		// this portion adds buttons to the bottom
-		JButton addBookButton = new JButton("Add Book");
+		JButton addBookButton = new JButton("Next Step");
 		addBookCopyButtonListener(addBookButton);
 		JPanel addBookButtonPanel = new JPanel();
 		addBookButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -154,33 +178,46 @@ public class AddBookWindow extends JFrame implements LibWindow {
 	private void addBookCopyButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			String isbn = isbnField.getText().trim();
-			// int maxCheckout = Integer.valueOf(maxCheckoutField.getText().trim());
 			String title = titleField.getText().trim();
-			
-			if(isbn.length() == 0 || maxCheckoutField.getText() != null || title.length() == 0 ) {
+			System.out.println(checkOutLength);
+
+			if(isbn.length() == 0  || title.length() == 0 || checkOutLength ==0) {
 				JOptionPane.showMessageDialog(this,"All fields must be nonempty");
 			}else {
-				int maxCheckout = Integer.valueOf(maxCheckoutField.getText().trim());
-				ControllerInterface controller = new SystemController();
-				try {
-					controller.addBook(isbn, title, maxCheckout);
-					JOptionPane.showMessageDialog(this,"Book added Successfully");
-					LibrarySystem.hideAllWindows();
-					LibrarySystem.INSTANCE.init();
-					LibrarySystem.INSTANCE.setVisible(true);
-					setToInitial();
-				} catch (BookException e) {
-					e.printStackTrace();
-				}
+				bookIsbn = isbn;
+				bookTitle = title;
+				bookmaxCheckout = checkOutLength;
+				isbnField.setText("");
+				titleField.setText("");
+				checkOutLength = 0;
+				sevenDays.setSelected(false);
+				twentyOneDays.setSelected(false);
+				LibrarySystem.hideAllWindows();
+				AddAuthorsToBookWindow.INSTANCE.init();
+				Util.centerFrameOnDesktop(AddAuthorsToBookWindow.INSTANCE);
+				AddAuthorsToBookWindow.INSTANCE.setVisible(true);
+				
 			}
 
 		});
 	}
 	
-	private void setToInitial() {
-		isbnField.setText("");
-		maxCheckoutField.setText("");
-		titleField.setText("");
+	public static void setToInitial() {
+		bookIsbn = null;
+		bookTitle = null;
+		bookmaxCheckout = 7;
+		
+		
 	}
 
+	public static String getbookIsbn() {
+		return bookIsbn;
+	}
+	
+	public static String getbookTitle() {
+		return bookTitle;
+	}
+	public static int getbookmaxCheckout() {
+		return bookmaxCheckout;
+	}
 }

@@ -47,6 +47,13 @@ public class SystemController implements ControllerInterface {
 		return retval;
 	}
 	
+	@Override
+	public List<String> allBookAuthors() {
+		DataAccess da = new DataAccessFacade();
+		List<String> retval = new ArrayList<>();
+		retval.addAll(da.readAuthorMap().keySet());
+		return retval;
+	}
 	public static void logout() {
 		currentAuth = null;
 		LibrarySystem.hideAllWindows();
@@ -65,11 +72,10 @@ public class SystemController implements ControllerInterface {
 		
 	}
 	@Override
-	public void addBook(String isbn, String title, int maxCheckoutLength) throws BookException {
+	public void addBook(String isbn, String title, int maxCheckoutLength, List<Author> list) throws BookException {
 		DataAccess da = new DataAccessFacade();
-		// Author auth = new Author();
-		List<Author> authors = new ArrayList<Author>();
-		Book book = new Book(isbn, title, maxCheckoutLength, authors);
+	//	List<Author> authors = new ArrayList<Author>();
+		Book book = new Book(isbn, title, maxCheckoutLength, list);
 		da.saveNewBook(book);
 		
 	}
