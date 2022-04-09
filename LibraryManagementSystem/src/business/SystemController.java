@@ -1,15 +1,18 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
 import librarysystem.LibrarySystem;
-import librarysystem.LoginWindow;
 
 public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
@@ -69,5 +72,66 @@ public class SystemController implements ControllerInterface {
 		Book book = new Book(isbn, title, maxCheckoutLength, authors);
 		da.saveNewBook(book);
 		
+	}
+	
+	public LibraryMember getLibraryMember(String id) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> members = da.readMemberMap();
+		return members.get(id);
+	}
+	
+	public Book getBook(String isbn) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, Book> books = da.readBooksMap();
+		return books.get(isbn);
+	}
+	
+	public Date calculateDueDate(int dateLong , Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH, dateLong);
+		return c.getTime();
+
+	}
+
+	public BookCopy checkAvailabilityAndSet(Book book) {	
+		BookCopy nextAvailable = book.getNextAvailableCopy();
+		if(nextAvailable == null) {
+			JOptionPane.showMessageDialog(null, "Book copy does not available!");
+		} else {
+			nextAvailable.changeAvailability();
+		}
+		return nextAvailable;
+	}
+	
+	public boolean checkoutBook(String memId, String isbn) {
+		Book book = getBook(isbn);
+		if(book != null) {
+			LibraryMember member = getLibraryMember(memId);
+			if(member != null) {
+				DataAccessFacade da = new DataAccessFacade();
+				HashMap<String, LibraryMember> mems = da.readMemberMap();
+				
+				BookCopy givenBook = checkAvailabilityAndSet(book);
+				CheckoutEntry ce = new CheckoutEntry(givenBook, new Date(),calculateDueDate(book.getMaxCheckoutLength(),new Date()));
+				
+				member.getCheckoutRecord().getCheckoutEntries().add(ce);
+				mems.put(member.getMemberId(), member);
+				da.saveMembers(mems);				
+				
+				return true;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Member with ID not found");
+				return false;
+			}
+		}else {
+			JOptionPane.showMessageDialog(null, "Book with ISBN not found");
+			return false;
+		}
+	}
+	
+	public void addCopies(Book book, int numOfCopies) {
+		book.addCopies(numOfCopies);
 	}
 }

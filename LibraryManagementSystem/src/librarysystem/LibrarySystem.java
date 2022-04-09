@@ -27,7 +27,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	JPanel mainPanel;
 	JMenuBar menuBar;
 	JMenu options;
-	JMenuItem login, allBookIds, addBook, addMember, allMemberIds, addBookCopy, printCheckOutRecord, logOut;
+	JMenuItem login, allBookIds, addBook, addMember, allMemberIds, addBookCopy, printCheckOutRecord, checkoutBook, logOut;
 	String pathToImage;
 	private boolean isInitialized = false;
 
@@ -39,6 +39,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			AddLibraryMemberWindows.INSTANCE,
 			AllBookIdsWindow.INSTANCE, 
 			AddABookCopyWindow.INSTANCE,
+			CheckoutBookWindow.INSTANCE,
 			PrintCheckoutWindow.INSTANCE
 		};
 
@@ -104,6 +105,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addMember.addActionListener(new AddMemberListener());
 		printCheckOutRecord = new JMenuItem("Print Member Checkhouts");
 		printCheckOutRecord.addActionListener(new PrintMemberCheckoutListener());
+		checkoutBook = new JMenuItem("Checkhout Book");
+		checkoutBook.addActionListener(new CheckoutBookListener());
+		
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {
 			@Override
@@ -113,7 +117,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		});
 		
 		JMenuItem[] notLogin = {login};
-		JMenuItem[] librarianItems = {allBookIds, allMemberIds, printCheckOutRecord, logOut};
+		JMenuItem[] librarianItems = {checkoutBook, allBookIds, allMemberIds, printCheckOutRecord, logOut};
 		JMenuItem[] adminItems = {allMemberIds, addMember, addBook, addBookCopy, logOut};
 		JMenuItem[] bothLevelItems = {allBookIds, addBook, addMember, allMemberIds, addBookCopy, printCheckOutRecord, logOut};
 		
@@ -144,15 +148,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isLoggedIn()) {				
-				LibrarySystem.hideAllWindows();
-				AddABookCopyWindow.INSTANCE.init();
-				Util.centerFrameOnDesktop(AddABookCopyWindow.INSTANCE);
-				AddABookCopyWindow.INSTANCE.setVisible(true);
-			}
-			else {
-				showLoginMessaget();
-			}
+			LibrarySystem.hideAllWindows();
+			AddABookCopyWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(AddABookCopyWindow.INSTANCE);
+			AddABookCopyWindow.INSTANCE.setVisible(true);
 		}
 
 	}
@@ -161,15 +160,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isLoggedIn()) {				
-				LibrarySystem.hideAllWindows();
-				AddBookWindow.INSTANCE.init();
-				Util.centerFrameOnDesktop(AddBookWindow.INSTANCE);
-				AddBookWindow.INSTANCE.setVisible(true);
-			}
-			else {
-				showLoginMessaget();
-			}
+			LibrarySystem.hideAllWindows();
+			AddBookWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(AddBookWindow.INSTANCE);
+			AddBookWindow.INSTANCE.setVisible(true);
 		}
 
 	}
@@ -178,15 +172,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isLoggedIn()) {				
-				LibrarySystem.hideAllWindows();
-				AddLibraryMemberWindows.INSTANCE.init();
-				Util.centerFrameOnDesktop(AddLibraryMemberWindows.INSTANCE);
-				AddLibraryMemberWindows.INSTANCE.setVisible(true);
-			}
-			else {
-				showLoginMessaget();
-			}
+			LibrarySystem.hideAllWindows();
+			AddLibraryMemberWindows.INSTANCE.init();
+			Util.centerFrameOnDesktop(AddLibraryMemberWindows.INSTANCE);
+			AddLibraryMemberWindows.INSTANCE.setVisible(true);
 		}
 
 	}
@@ -195,26 +184,21 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isLoggedIn()) {				
-				LibrarySystem.hideAllWindows();
-				AllBookIdsWindow.INSTANCE.init();
+			LibrarySystem.hideAllWindows();
+			AllBookIdsWindow.INSTANCE.init();
 
-				List<String> ids = ci.allBookIds();
-				Collections.sort(ids);
-				StringBuilder sb = new StringBuilder();
-				for (String s : ids) {
-					sb.append(s + "\n");
-				}
-				System.out.println(sb.toString());
-				AllBookIdsWindow.INSTANCE.setData(sb.toString());
-				AllBookIdsWindow.INSTANCE.pack();
-				// AllBookIdsWindow.INSTANCE.setSize(660,500);
-				Util.centerFrameOnDesktop(AllBookIdsWindow.INSTANCE);
-				AllBookIdsWindow.INSTANCE.setVisible(true);
+			List<String> ids = ci.allBookIds();
+			Collections.sort(ids);
+			StringBuilder sb = new StringBuilder();
+			for (String s : ids) {
+				sb.append(s + "\n");
 			}
-			else {
-				showLoginMessaget();
-			}
+			System.out.println(sb.toString());
+			AllBookIdsWindow.INSTANCE.setData(sb.toString());
+			AllBookIdsWindow.INSTANCE.pack();
+			// AllBookIdsWindow.INSTANCE.setSize(660,500);
+			Util.centerFrameOnDesktop(AllBookIdsWindow.INSTANCE);
+			AllBookIdsWindow.INSTANCE.setVisible(true);
 		}
 
 	}
@@ -223,26 +207,21 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isLoggedIn()) {				
-				LibrarySystem.hideAllWindows();
-				PrintCheckoutWindow.INSTANCE.init();
+			LibrarySystem.hideAllWindows();
+			PrintCheckoutWindow.INSTANCE.init();
 
-				List<String> ids = ci.allBookIds();
-				Collections.sort(ids);
-				StringBuilder sb = new StringBuilder();
-				for (String s : ids) {
-					sb.append(s + "\n");
-				}
-				System.out.println(sb.toString());
-//				PrintCheckoutWindow.INSTANCE.setData(sb.toString());
-				PrintCheckoutWindow.INSTANCE.pack();
-				// AllBookIdsWindow.INSTANCE.setSize(660,500);
-				Util.centerFrameOnDesktop(PrintCheckoutWindow.INSTANCE);
-				PrintCheckoutWindow.INSTANCE.setVisible(true);
+			List<String> ids = ci.allBookIds();
+			Collections.sort(ids);
+			StringBuilder sb = new StringBuilder();
+			for (String s : ids) {
+				sb.append(s + "\n");
 			}
-			else {
-				showLoginMessaget();
-			}
+			System.out.println(sb.toString());
+//			PrintCheckoutWindow.INSTANCE.setData(sb.toString());
+			PrintCheckoutWindow.INSTANCE.pack();
+			// AllBookIdsWindow.INSTANCE.setSize(660,500);
+			Util.centerFrameOnDesktop(PrintCheckoutWindow.INSTANCE);
+			PrintCheckoutWindow.INSTANCE.setVisible(true);
 		}
 
 	}
@@ -251,35 +230,41 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isLoggedIn()) {				
-				LibrarySystem.hideAllWindows();
-				AllMemberIdsWindow.INSTANCE.init();
-				AllMemberIdsWindow.INSTANCE.pack();
-				AllMemberIdsWindow.INSTANCE.setVisible(true);
+			LibrarySystem.hideAllWindows();
+			AllMemberIdsWindow.INSTANCE.init();
+			AllMemberIdsWindow.INSTANCE.pack();
+			AllMemberIdsWindow.INSTANCE.setVisible(true);
 
-				LibrarySystem.hideAllWindows();
-				AllBookIdsWindow.INSTANCE.init();
+			LibrarySystem.hideAllWindows();
+			AllBookIdsWindow.INSTANCE.init();
 
-				List<String> ids = ci.allMemberIds();
-				Collections.sort(ids);
-				StringBuilder sb = new StringBuilder();
-				for (String s : ids) {
-					sb.append(s + "\n");
-				}
-				System.out.println(sb.toString());
-				AllMemberIdsWindow.INSTANCE.setData(sb.toString());
-				AllMemberIdsWindow.INSTANCE.pack();
-				// AllMemberIdsWindow.INSTANCE.setSize(660,500);
-				Util.centerFrameOnDesktop(AllMemberIdsWindow.INSTANCE);
-				AllMemberIdsWindow.INSTANCE.setVisible(true);
+			List<String> ids = ci.allMemberIds();
+			Collections.sort(ids);
+			StringBuilder sb = new StringBuilder();
+			for (String s : ids) {
+				sb.append(s + "\n");
 			}
-			else {
-				showLoginMessaget();
-			}
+			System.out.println(sb.toString());
+			AllMemberIdsWindow.INSTANCE.setData(sb.toString());
+			AllMemberIdsWindow.INSTANCE.pack();
+			// AllMemberIdsWindow.INSTANCE.setSize(660,500);
+			Util.centerFrameOnDesktop(AllMemberIdsWindow.INSTANCE);
+			AllMemberIdsWindow.INSTANCE.setVisible(true);
 		}
 
 	}
 
+	class CheckoutBookListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			CheckoutBookWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(CheckoutBookWindow.INSTANCE);
+			CheckoutBookWindow.INSTANCE.setVisible(true);
+		}
+
+	}
+	
 	@Override
 	public boolean isInitialized() {
 		return isInitialized;
@@ -291,15 +276,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 	}
 	
-	private boolean isLoggedIn() {
-		return SystemController.currentAuth != null;
-	}
-	
 	private Auth getUserAuthorizationLevel() {
 		return SystemController.currentAuth;
-	}
-
-	private void showLoginMessaget() {
-		JOptionPane.showMessageDialog(null, "Please login to continue", "Failed", JOptionPane.WARNING_MESSAGE);
 	}
 }

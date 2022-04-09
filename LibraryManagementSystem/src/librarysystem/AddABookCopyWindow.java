@@ -15,6 +15,9 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.Book;
+import business.SystemController;
+
 public class AddABookCopyWindow extends JFrame implements LibWindow {
 	/**
 	 * 
@@ -33,7 +36,10 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 	private JTextField copyNumber;
 	private JTextField searchField;
 	
-	JButton searchButton;
+	private Book book;
+	private JButton searchButton;
+	private JButton addBookButton;
+	private JLabel bookFoundLabel;
 	
 	public boolean isInitialized() {
 		return isInitialized;
@@ -107,11 +113,12 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 
 		JPanel searchPanel = new JPanel();
 		
-		JLabel copyLabel = new JLabel("Copy Number");
-		JLabel searchLabel = new JLabel("Enter ISBN");
+		JLabel copyLabel = new JLabel("Number of Copies");
+		JLabel searchLabel = new JLabel("Enter Book ISBN");
+		bookFoundLabel = new JLabel("");
 
 		copyNumber = new JTextField(10);
-		searchField = new JTextField(30); 
+		searchField = new JTextField(20); 
 		searchButton = new JButton("Search");
 		searchButtonListener(searchButton);
 		
@@ -139,7 +146,8 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 		outerMiddle.add(middlePanel, BorderLayout.CENTER);
 
 		// this portion adds buttons to the bottom
-		JButton addBookButton = new JButton("Add Copy");
+		addBookButton = new JButton("Add Copy");
+		addBookButton.setEnabled(false);
 		addBookCopyButtonListener(addBookButton);
 		JPanel addBookButtonPanel = new JPanel();
 		addBookButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -157,15 +165,26 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 
 	private void addBookCopyButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			JOptionPane.showMessageDialog(this, "Successful added Book");
-
+			int numOfCopies = Integer.parseInt(copyNumber.getText());
+			SystemController controller = new SystemController();
+			controller.addCopies(book, numOfCopies);
+			JOptionPane.showMessageDialog(this, "Successful added Book copies");
 		});
 	}
 	
 	private void searchButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			JOptionPane.showMessageDialog(this, "Book found");
-
+			String isbn = searchField.getText();
+			SystemController controller = new SystemController();
+			book = controller.getBook(isbn);
+			if(book != null) {
+				JOptionPane.showMessageDialog(this, "Book found");
+				bookFoundLabel.setText(book.getTitle());
+				addBookButton.setEnabled(true);
+			}
+			else {
+				JOptionPane.showMessageDialog(this, "Book not found");
+			}
 		});
 	}
 

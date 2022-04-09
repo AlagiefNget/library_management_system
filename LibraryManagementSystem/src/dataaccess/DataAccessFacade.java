@@ -174,4 +174,11 @@ public class DataAccessFacade implements DataAccess {
 		private static final long serialVersionUID = 5399827794066637059L;
 	}
 	
+	public void saveBooks(HashMap<String, Book> books) {
+		saveToStorage(StorageType.BOOKS, books);
+	}
+	public void saveMembers(HashMap<String, LibraryMember> mems) {
+		saveToStorage(StorageType.MEMBERS, mems);
+	}
+	
 }
