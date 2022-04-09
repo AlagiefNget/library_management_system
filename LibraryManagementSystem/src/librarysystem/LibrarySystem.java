@@ -120,7 +120,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		JMenuItem[] notLogin = {login};
 		JMenuItem[] librarianItems = {checkoutBook, allBookIds, allMemberIds, printCheckOutRecord, logOut};
 		JMenuItem[] adminItems = {allMemberIds, addMember, addBook, addBookCopy, logOut};
-		JMenuItem[] bothLevelItems = {allBookIds, addBook, addMember, allMemberIds, addBookCopy, printCheckOutRecord, logOut};
+		JMenuItem[] bothLevelItems = {allBookIds, addBook, addMember, allMemberIds, addBookCopy,checkoutBook, printCheckOutRecord, logOut};
 		
 		Auth auth = getUserAuthorizationLevel();		
 		JMenuItem[] items = auth == Auth.LIBRARIAN ? librarianItems : auth == Auth.ADMIN ? adminItems : auth == Auth.BOTH ? bothLevelItems : notLogin;

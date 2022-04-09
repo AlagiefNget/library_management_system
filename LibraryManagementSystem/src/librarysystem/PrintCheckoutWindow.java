@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 
 import business.AddMemberException;
 import business.ControllerInterface;
+import business.MemberException;
 import business.SystemController;
 
 public class PrintCheckoutWindow extends JFrame implements LibWindow {
@@ -137,14 +138,18 @@ public class PrintCheckoutWindow extends JFrame implements LibWindow {
 				JOptionPane.showMessageDialog(this,"Field cannot be empty, Provide valid member Id");
 			}else {
 				ControllerInterface controller = new SystemController();
+				try {
 				controller.printCheckOutRecord(memId);
-				JOptionPane.showMessageDialog(this,"Member record printed");
+				JOptionPane.showMessageDialog(this,"Check the console for "+ memId+" Checkout Record");
 //				LibrarySystem.hideAllWindows();
 //				LibrarySystem.INSTANCE.init();
 //				LibrarySystem.INSTANCE.setVisible(true);
 				searchField.setText("");
 				
-				
+				}
+				catch(MemberException e) {
+					e.printStackTrace();
+				}
 			}
 
 		});
