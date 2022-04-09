@@ -14,6 +14,6 @@ public interface ControllerInterface {
 	public void addMember(String id, String firstname, String lastname,String phone, String city,String street,
 			String state, String zip) throws AddMemberException;
 	public void addBook(String isbn, String title , int maxCheckoutLength, List<Author> list) throws BookException;
-	public void printCheckOutRecord(String memberId);
+	public void printCheckOutRecord(String memberId)throws MemberException;
 	
 }
