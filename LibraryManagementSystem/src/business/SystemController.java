@@ -140,4 +140,17 @@ public class SystemController implements ControllerInterface {
 	public void addCopies(Book book, int numOfCopies) {
 		book.addCopies(numOfCopies);
 	}
+	
+	public void printCheckOutRecord(String memId) {
+		LibraryMember member = getLibraryMember(memId);
+		if(member != null) {
+			DataAccessFacade da = new DataAccessFacade();
+			HashMap<String, LibraryMember> mems = da.readMemberMap();
+			member.printCheckOutRecordEntry();
+				
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Member with ID not found");
+		}
+	}
 }

@@ -31,5 +31,9 @@ final public class LibraryMember extends Person implements Serializable {
 		this.checkoutRecord = checkoutRecord;
 	}
 	
+	public void printCheckOutRecordEntry() {
+		this.checkoutRecord.printCheckOutRecordEntry();
+		
+	}
 	private static final long serialVersionUID = -2226197306790714013L;
 }

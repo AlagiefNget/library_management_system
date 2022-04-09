@@ -18,4 +18,10 @@ public class CheckoutRecord implements Serializable{
 	public List<CheckoutEntry> getCheckoutEntries() {
 		return checkoutEntries;
 	}
+	public void printCheckOutRecordEntry() {
+		for(CheckoutEntry entry:checkoutEntries) {
+			System.out.println(entry.getBookCopy() +  " " + entry.getCheckoutDate()+ " " + entry.getDueDate());
+		}
+		
+	}
 }

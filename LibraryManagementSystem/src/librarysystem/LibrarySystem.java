@@ -104,10 +104,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		addBook.addActionListener(new AddBookListener());
 		addMember = new JMenuItem("Add Member");
 		addMember.addActionListener(new AddMemberListener());
-		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
-		printCheckOutRecord.addActionListener(new PrintMemberCheckoutListener());
-		checkoutBook = new JMenuItem("Checkout Book");
+		checkoutBook = new JMenuItem("Checkout");
 		checkoutBook.addActionListener(new CheckoutBookListener());
+		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
+		printCheckOutRecord.addActionListener(new PrintCheckoutBookListener());
 		
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {
@@ -203,29 +203,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		}
 
 	}
-	
-	class PrintMemberCheckoutListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			LibrarySystem.hideAllWindows();
-			PrintCheckoutWindow.INSTANCE.init();
-
-			List<String> ids = ci.allBookIds();
-			Collections.sort(ids);
-			StringBuilder sb = new StringBuilder();
-			for (String s : ids) {
-				sb.append(s + "\n");
-			}
-			System.out.println(sb.toString());
-//			PrintCheckoutWindow.INSTANCE.setData(sb.toString());
-			PrintCheckoutWindow.INSTANCE.pack();
-			// AllBookIdsWindow.INSTANCE.setSize(660,500);
-			Util.centerFrameOnDesktop(PrintCheckoutWindow.INSTANCE);
-			PrintCheckoutWindow.INSTANCE.setVisible(true);
-		}
-
-	}
 
 	class AllMemberIdsListener implements ActionListener {
 
@@ -266,6 +243,16 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 	}
 	
+	class PrintCheckoutBookListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			PrintCheckoutWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(PrintCheckoutWindow.INSTANCE);
+			PrintCheckoutWindow.INSTANCE.setVisible(true);
+		}
+
+	}
 	@Override
 	public boolean isInitialized() {
 		return isInitialized;

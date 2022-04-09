@@ -15,6 +15,10 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.AddMemberException;
+import business.ControllerInterface;
+import business.SystemController;
+
 public class PrintCheckoutWindow extends JFrame implements LibWindow {
 	/**
 	 * 
@@ -127,7 +131,21 @@ public class PrintCheckoutWindow extends JFrame implements LibWindow {
 	
 	private void searchButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			JOptionPane.showMessageDialog(this, "Book found");
+			String memId = searchField.getText().trim();
+
+			if(memId.length() == 0 ) {
+				JOptionPane.showMessageDialog(this,"Field cannot be empty, Provide valid member Id");
+			}else {
+				ControllerInterface controller = new SystemController();
+				controller.printCheckOutRecord(memId);
+				JOptionPane.showMessageDialog(this,"Member record printed");
+//				LibrarySystem.hideAllWindows();
+//				LibrarySystem.INSTANCE.init();
+//				LibrarySystem.INSTANCE.setVisible(true);
+				searchField.setText("");
+				
+				
+			}
 
 		});
 	}
