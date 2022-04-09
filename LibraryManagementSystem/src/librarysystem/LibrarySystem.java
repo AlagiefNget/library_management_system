@@ -203,29 +203,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		}
 
 	}
-	
-	class PrintMemberCheckoutListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			LibrarySystem.hideAllWindows();
-			PrintCheckoutWindow.INSTANCE.init();
-
-			List<String> ids = ci.allBookIds();
-			Collections.sort(ids);
-			StringBuilder sb = new StringBuilder();
-			for (String s : ids) {
-				sb.append(s + "\n");
-			}
-			System.out.println(sb.toString());
-//			PrintCheckoutWindow.INSTANCE.setData(sb.toString());
-			PrintCheckoutWindow.INSTANCE.pack();
-			// AllBookIdsWindow.INSTANCE.setSize(660,500);
-			Util.centerFrameOnDesktop(PrintCheckoutWindow.INSTANCE);
-			PrintCheckoutWindow.INSTANCE.setVisible(true);
-		}
-
-	}
 
 	class AllMemberIdsListener implements ActionListener {
 

@@ -19,9 +19,7 @@ import business.Book;
 import business.SystemController;
 
 public class AddABookCopyWindow extends JFrame implements LibWindow {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	public static final AddABookCopyWindow INSTANCE = new AddABookCopyWindow();
@@ -121,9 +119,6 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 		searchField = new JTextField(20); 
 		searchButton = new JButton("Search");
 		searchButtonListener(searchButton);
-		
-//		leftPanel.add(searchLabel);
-//		leftPanel.add(Box.createRigidArea(new Dimension(0, 12)));
 
 		searchPanel.add(searchLabel);
 		searchPanel.add(searchField);
@@ -165,10 +160,15 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 
 	private void addBookCopyButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			int numOfCopies = Integer.parseInt(copyNumber.getText());
-			SystemController controller = new SystemController();
-			controller.addCopies(book, numOfCopies);
-			JOptionPane.showMessageDialog(this, "Successful added Book copies");
+			int numOfCopies = 0;
+			try {
+				numOfCopies = Integer.parseInt(copyNumber.getText());
+				SystemController controller = new SystemController();
+				controller.addCopies(book, numOfCopies);
+				JOptionPane.showMessageDialog(this, "Successful added Book copies");
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Please enter a valid number");
+			}
 		});
 	}
 	
@@ -178,12 +178,12 @@ public class AddABookCopyWindow extends JFrame implements LibWindow {
 			SystemController controller = new SystemController();
 			book = controller.getBook(isbn);
 			if(book != null) {
-				JOptionPane.showMessageDialog(this, "Book found");
+				JOptionPane.showMessageDialog(this, "Book with ISBN: "+isbn +" found");
 				bookFoundLabel.setText(book.getTitle());
 				addBookButton.setEnabled(true);
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Book not found");
+				JOptionPane.showMessageDialog(this, "Book with ISBN: "+ isbn +" found");
 			}
 		});
 	}
