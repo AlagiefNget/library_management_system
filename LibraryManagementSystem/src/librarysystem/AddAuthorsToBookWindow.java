@@ -3,8 +3,6 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableColumn;
 
-import business.AddMemberException;
 import business.Address;
 import business.Author;
-import business.AuthorException;
 import business.BookException;
 import business.ControllerInterface;
 import business.SystemController;
@@ -45,7 +41,6 @@ public class AddAuthorsToBookWindow extends JFrame implements LibWindow {
 	private JPanel topPanel;
 	private JPanel middleHalf;
 	private JPanel lowerHalf;
-	private JPanel lowerRightHalf;
 	private JPanel outerMiddle;
 
 
@@ -147,16 +142,7 @@ public class AddAuthorsToBookWindow extends JFrame implements LibWindow {
 		lowerHalf.add(addBookButton);
 
 	}
-//	private void defineLowerRightHalf() {
-//
-//		lowerRightHalf = new JPanel();
-//		lowerRightHalf.setLayout(new FlowLayout(FlowLayout.RIGHT));
-//
-//		JButton addBookButton = new JButton("Save Book");
-//		saveBookButtonListener(addBookButton);
-//		lowerRightHalf.add(addBookButton);
-//
-//	}
+
 	public void defineOuterMiddle() {
 		outerMiddle = new JPanel();
 		outerMiddle.setLayout(new BorderLayout());

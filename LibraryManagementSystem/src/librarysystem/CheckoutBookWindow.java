@@ -3,7 +3,9 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.Box;
@@ -20,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableColumn;
 
+import business.CheckoutEntry;
 import business.CheckoutRecord;
 import business.SystemController;
 
@@ -44,7 +47,9 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 	private JScrollPane scrollPane;
 	private CustomTableModel model;
 	private final String[] DEFAULT_COLUMN_HEADERS = { "Book Title", "Checkout Date", "Due Date" };
-
+	List<String[]> data = new ArrayList<>();
+	List<CheckoutEntry> checkoutEntry;
+	
 	private final float[] COL_WIDTH_PROPORTIONS = { 0.35f, 0.35f, 0.3f };
 
 	private static final int SCREEN_WIDTH = 640;
@@ -178,12 +183,17 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 			String isbn = bookIsbn.getText();
 			if (memId.isEmpty() || isbn.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Fields need to be filled!");
+				return;
 			}
 
 			SystemController controller = new SystemController();
 			CheckoutRecord checkoutRecords = controller.checkoutBook(memId, isbn);
-//            TODO - Finish print out records in a table.
 			if (checkoutRecords != null) {
+				memberId.setText("");
+				bookIsbn.setText("");
+				checkoutEntry = checkoutRecords.getCheckoutEntries();
+				setValues(model);
+				table.updateUI();
 				JOptionPane.showMessageDialog(null, "Book checkout successful!");
 			} else {
 				JOptionPane.showMessageDialog(null, "Book checkout failed!");
@@ -221,6 +231,20 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 			column.setMinWidth(Math.round(proportions[i] * width));
 			table.addColumn(column);
 		}
+	}
+	
+	private void setValues(CustomTableModel model) {
+		for(CheckoutEntry entry : checkoutEntry) {
+			String[] row = {entry.getBookCopy().getBook().getTitle(), formatDate(entry.getCheckoutDate()), formatDate(entry.getDueDate())};
+			data.add(row);
+		}
+		model.setTableValues(data);
+	}
+	
+	private String formatDate(Date date) {
+		String pattern = "MM-dd-yyyy";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		return simpleDateFormat.format(date);
 	}
 
 }

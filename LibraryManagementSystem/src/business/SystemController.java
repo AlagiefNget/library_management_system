@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.JOptionPane;
 
@@ -151,5 +152,26 @@ public class SystemController implements ControllerInterface {
 			JOptionPane.showMessageDialog(null, "Member with ID not found");
 			
 		}
+	}
+	
+	public List<CheckOverdueCheckoutDetails> checkOverdueBooks(String isbn) {
+		DataAccessFacade daf = new DataAccessFacade();
+		HashMap<String, LibraryMember> members = daf.readMemberMap();
+		List<CheckOverdueCheckoutDetails> list = new ArrayList<>();
+		
+		for (Entry<String, LibraryMember> entry : members.entrySet()) {
+			LibraryMember member =entry.getValue();
+			for(CheckoutEntry checkoutEntry : member.getCheckoutRecord().getCheckoutEntries()) {
+				if(checkoutEntry.getBookCopy().getBook().getIsbn().equals(isbn) && !checkoutEntry.getBookCopy().isAvailable() && new Date().compareTo(checkoutEntry.getDueDate()) > 0) {
+					Book book = checkoutEntry.getBookCopy().getBook();
+					BookCopy bookCopy = checkoutEntry.getBookCopy();
+					String memberFullname = member.getFirstName() + " " + member.getLastName();
+					
+					list.add(new CheckOverdueCheckoutDetails(book.getIsbn(), book.getTitle(),checkoutEntry.getDueDate(), memberFullname, bookCopy.getCopyNum()));
+				}
+			}
+		}
+		return list;
+
 	}
 }

@@ -27,7 +27,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	JPanel mainPanel;
 	JMenuBar menuBar;
 	JMenu options;
-	JMenuItem login, allBookIds, addBook, addMember, allMemberIds, addBookCopy, printCheckOutRecord, checkoutBook, logOut;
+	JMenuItem login, allBookIds, addBook, addMember, allMemberIds, addBookCopy, printCheckOutRecord, checkoutBook, logOut, checkOverDue;
 	String pathToImage;
 	private boolean isInitialized = false;
 
@@ -41,7 +41,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			AddABookCopyWindow.INSTANCE,
 			CheckoutBookWindow.INSTANCE,
 			PrintCheckoutWindow.INSTANCE,
-			AddAuthorsToBookWindow.INSTANCE
+			AddAuthorsToBookWindow.INSTANCE,
+			CheckOverdueWindow.INSTANCE
 		};
 
 	public static void hideAllWindows() {
@@ -108,6 +109,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		checkoutBook.addActionListener(new CheckoutBookListener());
 		printCheckOutRecord = new JMenuItem("Print Member Checkouts");
 		printCheckOutRecord.addActionListener(new PrintCheckoutBookListener());
+		checkOverDue = new JMenuItem("Overdue");
+		checkOverDue.addActionListener(new BookCheckOverdueListener());
 		
 		logOut = new JMenuItem("Logout");
 		logOut.addActionListener(new ActionListener() {
@@ -118,9 +121,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		});
 		
 		JMenuItem[] notLogin = {login};
-		JMenuItem[] librarianItems = {checkoutBook, allBookIds, allMemberIds, printCheckOutRecord, logOut};
+		JMenuItem[] librarianItems = {checkoutBook, allBookIds, allMemberIds, printCheckOutRecord, checkOverDue, logOut};
 		JMenuItem[] adminItems = {allMemberIds, addMember, addBook, addBookCopy, logOut};
-		JMenuItem[] bothLevelItems = {allBookIds, addBook, addMember, allMemberIds, addBookCopy,checkoutBook, printCheckOutRecord, logOut};
+		JMenuItem[] bothLevelItems = {allBookIds, addBook, addMember, allMemberIds, addBookCopy,checkoutBook, printCheckOutRecord, checkOverDue, logOut};
 		
 		Auth auth = getUserAuthorizationLevel();		
 		JMenuItem[] items = auth == Auth.LIBRARIAN ? librarianItems : auth == Auth.ADMIN ? adminItems : auth == Auth.BOTH ? bothLevelItems : notLogin;
@@ -253,6 +256,18 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		}
 
 	}
+	
+	class BookCheckOverdueListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			CheckOverdueWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(CheckOverdueWindow.INSTANCE);
+			CheckOverdueWindow.INSTANCE.setVisible(true);
+		}
+
+	}
+	
 	@Override
 	public boolean isInitialized() {
 		return isInitialized;
