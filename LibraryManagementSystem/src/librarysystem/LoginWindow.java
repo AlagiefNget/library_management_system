@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.List;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,13 +19,15 @@ import javax.swing.JOptionPane;
 import business.ControllerInterface;
 import business.LoginException;
 import business.SystemController;
-import dataaccess.DataAccessFacade;
-import dataaccess.TestData;
-import dataaccess.User;
 
 
 public class LoginWindow extends JFrame implements LibWindow {
-    public static final LoginWindow INSTANCE = new LoginWindow();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -343309180131831152L;
+
+	public static final LoginWindow INSTANCE = new LoginWindow();
 	
 	private boolean isInitialized = false;
 	
@@ -35,8 +35,6 @@ public class LoginWindow extends JFrame implements LibWindow {
 	private JPanel upperHalf;
 	private JPanel middleHalf;
 	private JPanel lowerHalf;
-	private JPanel container;
-	
 	private JPanel topPanel;
 	private JPanel middlePanel;
 	private JPanel lowerPanel;
@@ -47,8 +45,6 @@ public class LoginWindow extends JFrame implements LibWindow {
 	private JPasswordField password;
 	private JLabel label;
 	private JButton loginButton;
-	private JButton logoutButton;
-	
 	public boolean isInitialized() {
 		return isInitialized;
 	}
@@ -198,17 +194,19 @@ public class LoginWindow extends JFrame implements LibWindow {
 						LibrarySystem.hideAllWindows();
 						LibrarySystem.INSTANCE.init();
 						LibrarySystem.INSTANCE.setVisible(true);
-						username.setText("");
-						password.setText("");
+						clearFields();
 					} catch (LoginException e) {
 						// e.printStackTrace();
-						username.setText("");
-						password.setText("");
+						clearFields();
 						JOptionPane.showMessageDialog(this,"Username or password is incorrect, Try Again");
 					}
 				}
     		});
     	}
 	
+    	private void clearFields() {
+    		username.setText("");
+			password.setText("");
+    	}
 
 }

@@ -153,7 +153,7 @@ public class CheckOverdueWindow extends JFrame implements LibWindow {
 		outerMiddle.add(middlePanel, BorderLayout.NORTH);
 
 		JButton searchBookButton = new JButton("Search");
-		checkoutButtonMemberListener(searchBookButton);
+		checkOverdueListener(searchBookButton);
 
 		JPanel searchBookButtonPanel = new JPanel();
 		searchBookButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -169,7 +169,7 @@ public class CheckOverdueWindow extends JFrame implements LibWindow {
 		});
 	}
 
-	private void checkoutButtonMemberListener(JButton butn) {
+	private void checkOverdueListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			String isbn = bookIsbn.getText();
 			if (isbn.isEmpty()) {
@@ -181,11 +181,9 @@ public class CheckOverdueWindow extends JFrame implements LibWindow {
 			records = controller.checkOverdueBooks(isbn);
 			System.out.println(records);
 			if (records.size() > 0) {
-				System.out.println("me 1");
 				setValues(model);
 				table.updateUI();
 			} else {
-				System.out.println("me 2");
 				JOptionPane.showMessageDialog(null, "No overdue records found");
 			}
 		});
