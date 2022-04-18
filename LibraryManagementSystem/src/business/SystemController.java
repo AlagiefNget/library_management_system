@@ -75,7 +75,6 @@ public class SystemController implements ControllerInterface {
 	@Override
 	public void addBook(String isbn, String title, int maxCheckoutLength, List<Author> list) throws BookException {
 		DataAccess da = new DataAccessFacade();
-	//	List<Author> authors = new ArrayList<Author>();
 		Book book = new Book(isbn, title, maxCheckoutLength, list);
 		da.saveNewBook(book);
 		
